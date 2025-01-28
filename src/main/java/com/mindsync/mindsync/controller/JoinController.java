@@ -3,6 +3,8 @@ package com.mindsync.mindsync.controller;
 import com.mindsync.mindsync.dto.JoinDTO;
 import com.mindsync.mindsync.dto.ResponseDTO;
 import com.mindsync.mindsync.service.JoinService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "User API", description = "사용자 API")
 public class JoinController {
     private final JoinService joinService;
 
@@ -18,6 +21,7 @@ public class JoinController {
     }
 
     @PostMapping("/join")
+    @Operation(summary = "회원가입", description = "사용자가 회원가입합니다.")
     public ResponseEntity<ResponseDTO> joinProcess(@RequestBody JoinDTO joinDTO) {
         try {
             joinService.joinProcess(joinDTO);
