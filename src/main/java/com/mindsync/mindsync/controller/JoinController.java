@@ -1,0 +1,29 @@
+package com.mindsync.mindsync.controller;
+
+import com.mindsync.mindsync.dto.JoinDTO;
+import com.mindsync.mindsync.dto.ResponseDTO;
+import com.mindsync.mindsync.service.JoinService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class JoinController {
+    private final JoinService joinService;
+
+    public JoinController(JoinService joinService) {
+        this.joinService = joinService;
+    }
+
+    @PostMapping("/join")
+    public ResponseEntity<ResponseDTO> joinProcess(@RequestBody JoinDTO joinDTO) {
+        try {
+            joinService.joinProcess(joinDTO);
+            return ResponseEntity.ok(new ResponseDTO(true, "회원가입이 완료되었습니다."));
+        } catch(IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new ResponseDTO(false, e.getMessage()));
+        }
+    }
+}
