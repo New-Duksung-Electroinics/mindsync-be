@@ -25,6 +25,7 @@ public class JoinService {
 
         Boolean isExist = userRepository.existsByEmail(email);
 
+        // 이미 가입된 회원이면
         if (isExist) {
             throw new IllegalArgumentException("이미 가입된 사용자입니다.");
         }

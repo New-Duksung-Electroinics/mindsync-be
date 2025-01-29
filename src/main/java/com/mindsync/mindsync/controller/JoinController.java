@@ -20,8 +20,9 @@ public class JoinController {
         this.joinService = joinService;
     }
 
+    // 회원가입 API
     @PostMapping("/join")
-    @Operation(summary = "회원가입", description = "사용자가 회원가입합니다.")
+    @Operation(summary = "회원가입", description = "중복된 회원을 검사하고 회원가입이 완료됩니다.")
     public ResponseEntity<ResponseDTO> joinProcess(@RequestBody JoinDTO joinDTO) {
         try {
             joinService.joinProcess(joinDTO);
