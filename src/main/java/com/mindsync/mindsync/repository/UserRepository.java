@@ -10,4 +10,6 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     // 회원 중복 확인
     Boolean existsByEmail(String email);
+
+    User findByEmail(String email);
 }
