@@ -1,6 +1,7 @@
 package com.mindsync.mindsync.config;
 
 
+import com.mindsync.mindsync.jwt.CustomLogoutFilter;
 import com.mindsync.mindsync.jwt.JWTFilter;
 import com.mindsync.mindsync.jwt.JWTUtil;
 import com.mindsync.mindsync.jwt.LoginFilter;
@@ -16,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -88,6 +90,7 @@ public class SecurityConfig {
 
         http    .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
 
+        http    .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class );
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
