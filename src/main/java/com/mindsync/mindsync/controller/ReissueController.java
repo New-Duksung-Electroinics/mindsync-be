@@ -50,10 +50,22 @@ public class ReissueController {
 
         // access token 발급
         String newAccess = jwtUtil.createJwt("access", email, role, 600000L);
+        String newRefresh = jwtUtil.createJwt("refresh", email, role, 86400000L);
 
         response.setHeader("access", newAccess);
+        response.addCookie(createCookie("refresh", newRefresh));
 
         return new ResponseEntity<>(HttpStatus.OK);
 
+    }
+
+    private Cookie createCookie(String key, String value) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(24*60*60);
+        //cookie.setSecure(true);
+        //cookie.setPath("/");
+        cookie.setHttpOnly(true);
+
+        return cookie;
     }
 }
