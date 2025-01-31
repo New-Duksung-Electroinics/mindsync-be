@@ -1,6 +1,8 @@
 package com.mindsync.mindsync.controller;
 
+import com.mindsync.mindsync.entity.Refresh;
 import com.mindsync.mindsync.jwt.JWTUtil;
+import com.mindsync.mindsync.repository.RefreshRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,11 +13,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @RestController
 public class ReissueController {
     private final JWTUtil jwtUtil;
-    public ReissueController(JWTUtil jwtUtil) {
+    private final RefreshRepository refreshRepository;
+    public ReissueController(JWTUtil jwtUtil, RefreshRepository refreshRepository) {
         this.jwtUtil = jwtUtil;
+        this.refreshRepository = refreshRepository;
     }
 
     @PostMapping("/reissue")
@@ -45,6 +51,13 @@ public class ReissueController {
             return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
 
+        // DB에 저장되어있는지 확인
+        Boolean isExist = refreshRepository.existsByRefresh(refresh);
+
+        if (!isExist) {
+            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+        }
+
         String email = jwtUtil.getEmail(refresh);
         String role = jwtUtil.getRole(refresh);
 
@@ -52,11 +65,25 @@ public class ReissueController {
         String newAccess = jwtUtil.createJwt("access", email, role, 600000L);
         String newRefresh = jwtUtil.createJwt("refresh", email, role, 86400000L);
 
+        refreshRepository.deleteByRefresh(refresh);
+        addRefreshEntity(email, newRefresh, 86400000L);
+
         response.setHeader("access", newAccess);
         response.addCookie(createCookie("refresh", newRefresh));
 
         return new ResponseEntity<>(HttpStatus.OK);
 
+    }
+
+    private void addRefreshEntity(String email, String refresh, Long expiredMs) {
+        Date date = new Date(System.currentTimeMillis() + expiredMs);
+
+        Refresh refreshEntity = new Refresh();
+        refreshEntity.setEmail(email);
+        refreshEntity.setRefresh(refresh);
+        refreshEntity.setExpiration(date.toString());
+
+        refreshRepository.save(refreshEntity);
     }
 
     private Cookie createCookie(String key, String value) {
