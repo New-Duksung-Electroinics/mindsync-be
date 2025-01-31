@@ -31,4 +31,10 @@ public class JoinController {
             return ResponseEntity.badRequest().body(new ResponseDTO(false, e.getMessage()));
         }
     }
+
+    @PostMapping("/admin")
+    public ResponseEntity<String> getAdminPage() {
+        return ResponseEntity.ok("Admin 페이지 오세용!");
+    }
+
 }
