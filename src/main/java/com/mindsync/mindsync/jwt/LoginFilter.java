@@ -55,20 +55,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     // 로그인 성공시 JWT 발급
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) {
-//        // 임시로 JWT를 발급
-//        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-//
-//        String email = customUserDetails.getUsername();
-//
-//        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-//        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-//        GrantedAuthority auth = iterator.next();
-//
-//        String role = auth.getAuthority();
-//        String token = jwtUtil.createJwt(email, role, 1000L * 60 * 60 * 10);
-//
-//        // 응답헤더에 실어보냄
-//        response.addHeader("Authorization", "Bearer " + token);
+
         String email = authentication.getName();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
