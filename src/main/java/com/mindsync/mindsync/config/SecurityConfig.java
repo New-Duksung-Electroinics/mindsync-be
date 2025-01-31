@@ -1,6 +1,7 @@
 package com.mindsync.mindsync.config;
 
 
+import com.mindsync.mindsync.jwt.JWTFilter;
 import com.mindsync.mindsync.jwt.JWTUtil;
 import com.mindsync.mindsync.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
@@ -55,7 +56,10 @@ public class SecurityConfig {
                         .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
                         .permitAll()
                         .requestMatchers("/login", "/", "/join").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
+
+        http    .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         http    .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
