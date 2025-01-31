@@ -2,6 +2,7 @@ package com.mindsync.mindsync.jwt;
 
 import com.mindsync.mindsync.dto.CustomUserDetails;
 import com.mindsync.mindsync.entity.User;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -34,38 +36,51 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String authorization = request.getHeader("Authorization");
+        // access 토큰을 요청 헤더에서 꺼냄
+        String accessToken = request.getHeader("access");
 
-        if (authorization == null || !authorization.startsWith("Bearer")) {
-            System.out.println("token null");
+        if (accessToken == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        System.out.println("authorization now");
+        try {
+            jwtUtil.isExpired(accessToken);
+        }catch (ExpiredJwtException e) {
+             // response body
+            PrintWriter writer = response.getWriter();
+            writer.print("access token 만료");
 
-        String token = authorization.split(" ")[1];
+            // response status code
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
 
-        if (jwtUtil.isExpired(token)) {
-            System.out.println("token expired");
+        }
+
+        String category = jwtUtil.getCategory(accessToken);
+
+        if (!category.equals("access")) {
+            // response body
+            PrintWriter writer = response.getWriter();
+            writer.print("access token 불분명");
+
+            // response status code
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
-        String email = jwtUtil.getEmail(token);
-        String role = jwtUtil.getRole(token);
+        String email = jwtUtil.getEmail(accessToken);
+        String role = jwtUtil.getRole(accessToken);
 
         User user = new User();
         user.setEmail(email);
-        user.setPassword("temppassword");
         user.setRole(role);
-
         CustomUserDetails customUserDetails = new CustomUserDetails(user);
 
         Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
-
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);
+
     }
 }
