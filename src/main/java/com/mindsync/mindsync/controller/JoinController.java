@@ -32,9 +32,6 @@ public class JoinController {
         }
     }
 
-    @PostMapping("/***REMOVED***")
-    public ResponseEntity<String> getAdminPage() {
-        return ResponseEntity.ok("Admin 페이지 오세용!");
-    }
+
 
 }

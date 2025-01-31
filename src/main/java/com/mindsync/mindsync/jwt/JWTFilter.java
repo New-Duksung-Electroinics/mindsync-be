@@ -26,7 +26,6 @@ public class JWTFilter extends OncePerRequestFilter {
     }
 
 
-    // ✅ "/login" 요청이면 필터 실행 안 함
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         return request.getServletPath().equals("/login");
