@@ -1,5 +1,6 @@
 package com.mindsync.mindsync.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mindsync.mindsync.dto.CustomUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,8 +12,10 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
@@ -26,16 +29,26 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String email = request.getParameter("email"); // "username" 대신 "email" 필드 사용
-        String password = request.getParameter("password");
+        try {
+            // JSON 요청에서 email과 password를 읽어오기 -> 클라이언트에서 JSON 형태로 요청 받기
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, String> requestBody = objectMapper.readValue(request.getInputStream(), Map.class);
 
-        if (email == null || password == null) {
-            throw new AuthenticationException("Invalid login request") {}; // 400 Bad Request 처리
+            String email = requestBody.get("email");
+            String password = requestBody.get("password");
+
+            if (email == null || password == null) {
+                throw new AuthenticationException("Invalid login request") {}; 
+            }
+
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
+            return authenticationManager.authenticate(authToken);
+        } catch (IOException e) {
+            throw new AuthenticationException("Failed to parse JSON request") {};
         }
-
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password, null);
-        return authenticationManager.authenticate(authToken);
     }
+
+
 
     // 로그인 성공시 JWT 발급
     @Override
