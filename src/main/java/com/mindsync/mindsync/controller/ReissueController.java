@@ -24,7 +24,7 @@ public class ReissueController {
         this.refreshRepository = refreshRepository;
     }
 
-    @PostMapping("/reissue")
+    @PostMapping("/user/token")
     public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
 
         String refresh = null;

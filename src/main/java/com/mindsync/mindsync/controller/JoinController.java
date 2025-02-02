@@ -21,7 +21,7 @@ public class JoinController {
     }
 
     // 회원가입 API
-    @PostMapping("/join")
+    @PostMapping("/user/join")
     @Operation(summary = "회원가입", description = "중복된 회원을 검사하고 회원가입이 완료됩니다.")
     public ResponseEntity<ResponseDTO> joinProcess(@RequestBody JoinDTO joinDTO) {
         try {
