@@ -81,16 +81,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
                         .permitAll()
-                        .requestMatchers("/login", "/", "/join").permitAll()
+                        .requestMatchers("/user/login", "/", "/user/join").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
-                        .requestMatchers("/reissue").permitAll()
+                        .requestMatchers("/user/token").permitAll()
                         .anyRequest().authenticated());
-
-        http    .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         http    .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
 
-        http    .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class );
+        http    .addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class); // JWT 필터가 로그인 필터 다음에 실행되도록 수정
+
+        http    .addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
+
         http
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
