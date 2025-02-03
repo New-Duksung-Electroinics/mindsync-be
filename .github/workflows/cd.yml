@@ -1,0 +1,79 @@
+name: Deploy to Ubuntu Server using Docker
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  DOCKER_IMAGE_NAME: kanepark/app
+  SERVER_HOST: 211.117.197.184
+  SERVER_SSH_USER: parkhaein
+  PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+jobs:
+  build-and-push-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew clean build --info
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag ${{ env.DOCKER_IMAGE_NAME }}:latest
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Push the Docker image
+        run: docker push ${{ env.DOCKER_IMAGE_NAME }}:latest
+
+  deploy-to-ubuntu-server:
+    needs: build-and-push-docker
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Deploy to Ubuntu Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.SERVER_HOST }}
+          username: ${{ env.SERVER_SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 234
+          script: |
+            LOG_DIR="/home/ubuntu/app-logs"
+            mkdir -p $LOG_DIR
+            touch $LOG_DIR/app.log
+  
+            # sudo 명령어에 비밀번호 자동 입력
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker container prune -f
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker image prune -af
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker volume prune -f
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker system prune -af --volumes
+  
+            # 기존 컨테이너 종료 (종료를 기다림)
+            CONTAINER_ID=$(sudo docker ps -q --filter "publish=10")
+            if [ ! -z "$CONTAINER_ID" ]; then
+              echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker stop $CONTAINER_ID
+              echo "컨테이너 종료 대기 중..."
+              while [ "$(sudo docker ps -q --filter "id=$CONTAINER_ID")" ]; do
+                sleep 1
+              done
+            fi
+          
+            # Docker 이미지 업데이트 및 컨테이너 실행
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker pull ${{ env.DOCKER_IMAGE_NAME }}:latest
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker run --name mindsync-be-container -d -p 10:8080 -e TZ=Asia/Seoul \
+              -v $LOG_DIR/app.log:/app/logs/app.log ${{ env.DOCKER_IMAGE_NAME }}:latest
