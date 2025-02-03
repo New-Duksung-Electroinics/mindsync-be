@@ -29,7 +29,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	// hibernate validator
-	implementation 'org.hibernate:hibernate-validator:5.2.4.Final'
+	implementation 'jakarta.validation:jakarta.validation-api:2.0.2'
+    	implementation 'org.hibernate.validator:hibernate-validator:7.0.4'
+   	implementation 'org.glassfish:jakarta.el:4.0.0'
+
+	
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
