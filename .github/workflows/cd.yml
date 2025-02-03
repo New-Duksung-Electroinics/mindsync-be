@@ -68,13 +68,27 @@ jobs:
   
             # 기존 컨테이너 종료 (종료를 기다림)
             CONTAINER_ID=$(sudo docker ps -q --filter "publish=10")
+
             if [ ! -z "$CONTAINER_ID" ]; then
               echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker stop $CONTAINER_ID
               echo "컨테이너 종료 대기 중..."
-              while [ "$(sudo docker ps -q --filter "id=$CONTAINER_ID")" ]; do
+              
+              # 컨테이너 종료 상태를 기다림
+              while true; do
+                # 컨테이너 상태 확인
+                CONTAINER_STATUS=$(sudo docker inspect --format '{{.State.Status}}' $CONTAINER_ID)
+                
+                # 종료된 상태이면 루프 종료
+                if [ "$CONTAINER_STATUS" == "exited" ]; then
+                  echo "컨테이너 종료 완료"
+                  break
+                fi
+                
+                # 1초 대기 후 다시 확인
                 sleep 1
               done
             fi
+
           
             # Docker 이미지 업데이트 및 컨테이너 실행
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker pull ${{ env.DOCKER_IMAGE_NAME }}:latest
