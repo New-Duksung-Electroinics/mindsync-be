@@ -65,7 +65,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
 
     // 로그인 성공시 JWT 발급
-// 로그인 성공 시 JSON 응답 반환
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
         String email = authentication.getName();
