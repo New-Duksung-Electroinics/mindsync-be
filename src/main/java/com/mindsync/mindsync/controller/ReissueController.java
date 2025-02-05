@@ -1,9 +1,16 @@
 package com.mindsync.mindsync.controller;
 
+import com.mindsync.mindsync.dto.ResponseDto;
 import com.mindsync.mindsync.entity.Refresh;
 import com.mindsync.mindsync.jwt.JWTUtil;
 import com.mindsync.mindsync.repository.RefreshRepository;
+import com.mindsync.mindsync.utils.ResponseUtil;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,9 +30,9 @@ public class ReissueController {
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
     }
-
+    @Operation(summary = "Access Token 재발급", description = "Refresh Token을 이용해 새로운 Access Token을 발급합니다.")
     @PostMapping("/user/token")
-    public ResponseEntity<?> reissue(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseDto reissue(HttpServletRequest request, HttpServletResponse response) {
 
         String refresh = null;
         Cookie[] cookies = request.getCookies();
@@ -36,26 +43,26 @@ public class ReissueController {
         }
 
         if (refresh == null) {
-            return new ResponseEntity<>("refresh token null", HttpStatus.BAD_REQUEST);
+            return ResponseUtil.ERROR("Refresh Toekn이 없습니다", null);
         }
 
         try{
             jwtUtil.isExpired(refresh);
         } catch (ExpiredJwtException e) {
-            return new ResponseEntity<>("refresh token expired", HttpStatus.BAD_REQUEST);
+            return ResponseUtil.ERROR("Refresh Token이 만료되었습니다.", null);
         }
 
         String category = jwtUtil.getCategory(refresh);
 
         if (!category.equals("refresh")) {
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+            return ResponseUtil.ERROR("Refresh Token이 불분명합니다.", null);
         }
 
         // DB에 저장되어있는지 확인
         Boolean isExist = refreshRepository.existsByRefresh(refresh);
 
         if (!isExist) {
-            return new ResponseEntity<>("invalid refresh token", HttpStatus.BAD_REQUEST);
+            return ResponseUtil.ERROR("Refresh Token이 DB에 없습니다.", null);
         }
 
         String email = jwtUtil.getEmail(refresh);
@@ -71,7 +78,7 @@ public class ReissueController {
         response.setHeader("access", newAccess);
         response.addCookie(createCookie("refresh", newRefresh));
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseUtil.SUCCESS("Refresh Token이 재발급되었습니다.", null);
 
     }
 
