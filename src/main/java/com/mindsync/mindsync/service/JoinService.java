@@ -45,4 +45,8 @@ public class JoinService {
 
     }
 
+    public boolean isEmailExist(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
 }
