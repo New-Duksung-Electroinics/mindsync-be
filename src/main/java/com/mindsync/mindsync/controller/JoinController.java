@@ -1,8 +1,9 @@
 package com.mindsync.mindsync.controller;
 
 import com.mindsync.mindsync.dto.JoinDTO;
-import com.mindsync.mindsync.dto.ResponseDTO;
+import com.mindsync.mindsync.dto.ResponseDto;
 import com.mindsync.mindsync.service.JoinService;
+import com.mindsync.mindsync.utils.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -23,15 +24,13 @@ public class JoinController {
     // 회원가입 API
     @PostMapping("/user/join")
     @Operation(summary = "회원가입", description = "중복된 회원을 검사하고 회원가입이 완료됩니다.")
-    public ResponseEntity<ResponseDTO> joinProcess(@RequestBody JoinDTO joinDTO) {
+    public ResponseDto joinProcess(@RequestBody JoinDTO joinDTO) {
         try {
             joinService.joinProcess(joinDTO);
-            return ResponseEntity.ok(new ResponseDTO(true, "회원가입이 완료되었습니다."));
-        } catch(IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ResponseDTO(false, e.getMessage()));
+            return ResponseUtil.SUCCESS("회원가입이 완료되었습니다", null);
+        } catch (IllegalArgumentException e) {
+            return ResponseUtil.ERROR("서버 에러가 발생했습니다.", null);
         }
+
     }
-
-
-
 }
