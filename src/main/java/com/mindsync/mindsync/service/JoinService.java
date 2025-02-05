@@ -36,13 +36,17 @@ public class JoinService {
             data.setNickname(nickname);
             data.setUsermbti(usermbti);
             data.setPassword(bCryptPasswordEncoder.encode(password));
-            data.setRole("ROLE_ADMIN");
+            data.setRole("ROLE_USER");
 
             userRepository.save(data);
         }catch (Exception e) {
             throw new RuntimeException("서버 오류가 발생했습니다.");
         }
 
+    }
+
+    public boolean isEmailExist(String email) {
+        return userRepository.existsByEmail(email);
     }
 
 }
