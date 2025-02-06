@@ -68,6 +68,9 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
         String email = authentication.getName();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String username = userDetails.getRealName();
+
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
@@ -86,7 +89,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
 
-        ResponseDto<Map<String, String>> responseDto = ResponseUtil.SUCCESS("로그인 성공했습니다.", Map.of("accessToken", access));
+        ResponseDto<Map<String, String>> responseDto = ResponseUtil.SUCCESS("로그인 성공했습니다.", Map.of("username", username) );
         writeJsonResponse(response, responseDto);
     }
 
