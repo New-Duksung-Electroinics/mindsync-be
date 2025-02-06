@@ -16,7 +16,7 @@ public class User {
 
     @Indexed(unique = true)
     private String email;
-    private String nickname;
+    private String username;
     private String usermbti;
     private String password;
 
