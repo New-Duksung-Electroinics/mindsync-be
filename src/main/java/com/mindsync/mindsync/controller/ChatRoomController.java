@@ -1,5 +1,7 @@
 package com.mindsync.mindsync.controller;
 
+import com.mindsync.mindsync.dto.ChatRoomRequestDTO;
+import com.mindsync.mindsync.dto.ChatRoomResponseDTO;
 import com.mindsync.mindsync.entity.ChatRoom;
 import com.mindsync.mindsync.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +19,25 @@ public class ChatRoomController {
 
     // 채팅방 생성 API (AI가 목차 생성 후 반환)
     @PostMapping("/room")
-    public ResponseEntity<ChatRoom> createRoom(@RequestBody Map<String, Object> request) {
-        String title = (String) request.get("title");
-        String host = (String) request.get("host");
-        List<String> participants = (List<String>) request.get("participants");
-        String expectedContent = (String) request.get("content");
+    public ResponseEntity<ChatRoomResponseDTO> createRoom(@RequestBody ChatRoomRequestDTO requestDto) {
+        ChatRoom chatRoom = chatRoomService.createRoom(
+                requestDto.getTitle(),
+                requestDto.getHost(),
+                requestDto.getParticipants(),
+                requestDto.getContent()
+        );
 
-        ChatRoom chatRoom = chatRoomService.createRoom(title, host, participants, expectedContent);
+        // 응답을 DTO로 변환하여 반환
+        ChatRoomResponseDTO responseDto = ChatRoomResponseDTO.builder()
+                .roomId(chatRoom.getRoomId())
+                .title(chatRoom.getTitle())
+                .host(chatRoom.getHost())
+                .participants(chatRoom.getParticipants())
+                .content(chatRoom.getContent())
+                .agenda(chatRoom.getAgenda())
+                .build();
 
-        return ResponseEntity.ok(chatRoom);
+        return ResponseEntity.ok(responseDto);
     }
 
 }
