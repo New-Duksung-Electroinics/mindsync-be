@@ -20,7 +20,7 @@ public class JoinService {
     public void joinProcess(JoinDTO joinDTO) {
         String email = joinDTO.getEmail();
         String password = joinDTO.getPassword();
-        String nickname = joinDTO.getNickname();
+        String username = joinDTO.getUsername();
         String usermbti = joinDTO.getUsermbti();
 
         Boolean isExist = userRepository.existsByEmail(email);
@@ -33,7 +33,7 @@ public class JoinService {
         try{
             User data = new User();
             data.setEmail(email);
-            data.setNickname(nickname);
+            data.setUsername(username);
             data.setUsermbti(usermbti);
             data.setPassword(bCryptPasswordEncoder.encode(password));
             data.setRole("ROLE_USER");
