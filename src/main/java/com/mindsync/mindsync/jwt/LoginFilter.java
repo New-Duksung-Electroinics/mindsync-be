@@ -70,8 +70,6 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String username = userDetails.getRealName();
 
-        System.out.println("username = " + username);
-
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
@@ -90,7 +88,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
 
-        ResponseDto<Map<String, String>> responseDto = ResponseUtil.SUCCESS("로그인 성공했습니다.", null );
+        ResponseDto<Map<String, String>> responseDto = ResponseUtil.SUCCESS("로그인 성공했습니다.", Map.of("username", username) );
         writeJsonResponse(response, responseDto);
     }
 
