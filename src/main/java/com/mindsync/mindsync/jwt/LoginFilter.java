@@ -63,13 +63,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         }
     }
 
-
     // 로그인 성공시 JWT 발급
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException {
         String email = authentication.getName();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String username = userDetails.getRealName();
+
+        System.out.println("username = " + username);
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
@@ -89,7 +90,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
 
-        ResponseDto<Map<String, String>> responseDto = ResponseUtil.SUCCESS("로그인 성공했습니다.", Map.of("username", username) );
+        ResponseDto<Map<String, String>> responseDto = ResponseUtil.SUCCESS("로그인 성공했습니다.", null );
         writeJsonResponse(response, responseDto);
     }
 
