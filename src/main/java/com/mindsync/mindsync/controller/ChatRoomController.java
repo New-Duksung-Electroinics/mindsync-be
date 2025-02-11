@@ -34,7 +34,6 @@ public class ChatRoomController {
                 .host(chatRoom.getHost())
                 .participants(chatRoom.getParticipants())
                 .content(chatRoom.getContent())
-                .agenda(chatRoom.getAgenda())
                 .build();
 
         return ResponseEntity.ok(responseDto);
