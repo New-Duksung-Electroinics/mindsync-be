@@ -13,5 +13,4 @@ public class ChatRoomResponseDTO {
     private String host;
     private List<String> participants;
     private String content;
-    private List<String> agenda;
 }

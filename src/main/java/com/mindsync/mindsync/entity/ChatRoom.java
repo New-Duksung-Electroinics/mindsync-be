@@ -23,9 +23,8 @@ public class ChatRoom {
     private String host; // 회의 주최자 이름
     private List<String> participants; // 참여 멤버 (이메일 리스트)
     private String content; // 회의 예상 내용
-    private List<String> agenda; // AI가 생성한 회의 목차
 
-    public static ChatRoom create(String title, String host, List<String> participants, String content, List<String> agenda) {
+    public static ChatRoom create(String title, String host, List<String> participants, String content) {
         return ChatRoom.builder()
                 .id(UUID.randomUUID().toString())
                 .roomId(UUID.randomUUID().toString()) // 채팅방의 고유 ID
@@ -33,7 +32,6 @@ public class ChatRoom {
                 .host(host)
                 .participants(participants)
                 .content(content)
-                .agenda(agenda)
                 .build();
     }
 
