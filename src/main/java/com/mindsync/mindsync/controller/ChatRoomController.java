@@ -12,11 +12,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/chat")
-@RequiredArgsConstructor
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
-    // 채팅방 생성 API (AI가 목차 생성 후 반환)
+    public ChatRoomController(ChatRoomService chatRoomService) {
+        this.chatRoomService = chatRoomService;
+    }
+
     @PostMapping("/room")
     public ResponseDto createRoom(@RequestBody ChatRoomRequestDTO requestDto) {
         try {
@@ -26,16 +28,13 @@ public class ChatRoomController {
                     requestDto.getParticipants(),
                     requestDto.getContent()
             );
-
             Map<String, String> responseData = Map.of(
                     "roomId", chatRoom.getRoomId()
             );
-
             return ResponseUtil.SUCCESS("방 생성이 완료되었습니다.", responseData);
-
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(ResponseUtil.ERROR("서버 에러가 발생했습니다.", null)).getBody();
         }
-        }
     }
+}
 
