@@ -6,7 +6,6 @@ import com.mindsync.mindsync.jwt.JWTFilter;
 import com.mindsync.mindsync.jwt.JWTUtil;
 import com.mindsync.mindsync.jwt.LoginFilter;
 import com.mindsync.mindsync.repository.RefreshRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,8 +20,6 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Collections;
 import java.util.List;
 
 @Configuration

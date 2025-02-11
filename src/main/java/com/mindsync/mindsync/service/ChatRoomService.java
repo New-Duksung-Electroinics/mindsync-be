@@ -4,8 +4,6 @@ import com.mindsync.mindsync.entity.ChatRoom;
 import com.mindsync.mindsync.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
 import java.util.List;
 
 @Service
