@@ -2,17 +2,16 @@ package com.mindsync.mindsync.service;
 
 import com.mindsync.mindsync.entity.ChatRoom;
 import com.mindsync.mindsync.repository.ChatRoomRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor // 생성자 주입
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
 
+    private ChatRoomService(ChatRoomRepository chatRoomRepository) {
+        this.chatRoomRepository = chatRoomRepository;
+    }
 
     public ChatRoom createRoom(String title, String host, List<String> participants, String content) {
 

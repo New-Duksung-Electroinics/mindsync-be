@@ -3,7 +3,6 @@ package com.mindsync.mindsync.repository;
 import com.mindsync.mindsync.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
