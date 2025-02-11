@@ -7,11 +7,7 @@ import com.mindsync.mindsync.service.JoinService;
 import com.mindsync.mindsync.utils.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @Tag(name = "User API", description = "사용자 API")
