@@ -1,7 +1,6 @@
 package com.mindsync.mindsync.controller;
 
 import com.mindsync.mindsync.dto.ChatRoomRequestDTO;
-import com.mindsync.mindsync.dto.ChatRoomResponseDTO;
 import com.mindsync.mindsync.dto.ResponseDto;
 import com.mindsync.mindsync.entity.ChatRoom;
 import com.mindsync.mindsync.service.ChatRoomService;
@@ -9,8 +8,6 @@ import com.mindsync.mindsync.utils.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -33,7 +30,6 @@ public class ChatRoomController {
             Map<String, String> responseData = Map.of(
                     "roomId", chatRoom.getRoomId()
             );
-
 
             return ResponseUtil.SUCCESS("방 생성이 완료되었습니다.", responseData);
 
