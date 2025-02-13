@@ -60,7 +60,7 @@ public class SecurityConfig {
                 .requestMatchers("/user/login", "/", "/user/join", "/user/check-email").permitAll()
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .requestMatchers("/user/token").permitAll()
-                .requestMatchers("/chat/room").authenticated()
+                .requestMatchers("/chat/room", "/chat/search").authenticated()
                 .anyRequest().authenticated());
 
         http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
