@@ -40,6 +40,7 @@ public class JWTUtil {
     }
 
     public boolean validateToken(String token) {
+        System.out.println("token = " + token);
         try {
             Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
             return true; // 토큰이 유효함
