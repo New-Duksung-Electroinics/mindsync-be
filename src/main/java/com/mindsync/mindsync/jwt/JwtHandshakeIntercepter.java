@@ -26,7 +26,8 @@ public class JwtHandshakeIntercepter implements HandshakeInterceptor {
                     .orElse(null);
 
             if (token != null && jwtUtil.validateToken(token)) {
-
+                attributes.put("user", jwtUtil.getEmail(token));
+                return true;
             }
         }
         return false;
@@ -37,5 +38,5 @@ public class JwtHandshakeIntercepter implements HandshakeInterceptor {
 
     }
 
-    private final JWTUtil
+
 }
