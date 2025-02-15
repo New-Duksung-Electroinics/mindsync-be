@@ -1,5 +1,7 @@
 package com.mindsync.mindsync.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -35,6 +37,18 @@ public class JWTUtil {
     public Boolean isExpired(String token) {
 
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
+            return true; // 토큰이 유효함
+        } catch (ExpiredJwtException e) {
+            System.out.println("토큰이 만료되었습니다.");
+        } catch (JwtException | IllegalArgumentException e) {
+            System.out.println("유효하지 않은 토큰입니다.");
+        }
+        return false; // 토큰이 유효하지 않음
     }
     
     // 임시 JWT 토큰 만들기
