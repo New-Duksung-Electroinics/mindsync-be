@@ -1,6 +1,7 @@
 package com.mindsync.mindsync.config;
 
 import com.mindsync.mindsync.jwt.JWTUtil;
+import com.mindsync.mindsync.jwt.JwtHandshakeInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -21,7 +22,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws-chat")
                 .setAllowedOriginPatterns("*")
-                .addInterceptors()
+                .addInterceptors(new JwtHandshakeInterceptor(jwtUtil))
                 .withSockJS();
     }
 

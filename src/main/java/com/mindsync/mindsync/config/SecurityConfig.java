@@ -61,6 +61,7 @@ public class SecurityConfig {
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .requestMatchers("/user/token").permitAll()
                 .requestMatchers("/chat/room", "/chat/search").authenticated()
+                .requestMatchers("/ws-chat/**").permitAll()
                 .anyRequest().authenticated());
 
         http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
