@@ -64,6 +64,7 @@ public class SecurityConfig {
                 .requestMatchers("/ws-chat/**").permitAll()
                 .anyRequest().authenticated());
 
+
         http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
 
         http.addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);

@@ -21,28 +21,28 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
                                    WebSocketHandler wsHandler, Map<String, Object> attributes) {
+        System.out.println("🔥 WebSocket 핸드셰이크 시작");
+
         if (request instanceof ServletServerHttpRequest servletRequest) {
             HttpServletRequest httpServletRequest = servletRequest.getServletRequest();
-
             String token = Optional.ofNullable(httpServletRequest.getHeader("Authorization"))
                     .map(t -> t.replace("Bearer ", ""))
                     .orElse(null);
 
-            if (token == null) {
-                System.out.println("🔴 WebSocket 연결 실패: AccessToken 없음");
-                return false;
-            }
+            System.out.println("🟡 추출된 AccessToken: " + token);
 
-            if (!jwtUtil.validateToken(token)) {
+            if (token == null || !jwtUtil.validateToken(token)) {
                 System.out.println("🔴 WebSocket 연결 실패: 유효하지 않은 AccessToken");
                 return false;
             }
 
             String email = jwtUtil.getEmail(token);
             attributes.put("user", email);
-            System.out.println("🟢 WebSocket 연결 성공: " + email);
+            System.out.println("✅ WebSocket 연결 성공: " + email);
             return true;
         }
+
+        System.out.println("🔴 WebSocket 요청이 ServletServerHttpRequest가 아님");
         return false;
     }
 
