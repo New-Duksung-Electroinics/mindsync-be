@@ -52,12 +52,6 @@ public class ChatRoomController {
         }
     }
 
-    @MessageMapping("/{roomId}/enter")
-    public void enterChatRoom(@Payload ChatMessageDTO message, @DestinationVariable String roomId) {
-        message.setMessage(message.getSender() + "님이 채팅방에 입장했습니다.");
-        messagingTemplate.convertAndSend("/topic/chat/" + roomId, message);
-    }
-
     @GetMapping("/search")
     public ResponseEntity<ResponseDto<List<EmailSearchDto>>> searchUsers(@RequestParam String query) {
         List<EmailSearchDto> users = userService.searchUsersByEmail(query);
