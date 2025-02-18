@@ -1,5 +1,6 @@
 package com.mindsync.mindsync.controller;
 
+import com.mindsync.mindsync.dto.ChatMessageDTO;
 import com.mindsync.mindsync.dto.ChatRoomRequestDTO;
 import com.mindsync.mindsync.dto.EmailSearchDto;
 import com.mindsync.mindsync.dto.ResponseDto;
@@ -9,6 +10,10 @@ import com.mindsync.mindsync.service.UserService;
 import com.mindsync.mindsync.utils.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -21,9 +26,12 @@ public class ChatRoomController {
     private final ChatRoomService chatRoomService;
     private final UserService userService;
 
-    public ChatRoomController(ChatRoomService chatRoomService, UserService userService) {
+    private final SimpMessagingTemplate messagingTemplate;
+
+    public ChatRoomController(ChatRoomService chatRoomService, UserService userService, SimpMessagingTemplate messagingTemplate) {
         this.chatRoomService = chatRoomService;
         this.userService = userService;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @PostMapping("/room")
