@@ -1,7 +1,7 @@
 package com.mindsync.mindsync.controller;
 
-import com.mindsync.mindsync.dto.ChatMessageDTO;
-import com.mindsync.mindsync.dto.ChatRoomRequestDTO;
+
+import com.mindsync.mindsync.dto.ChatRoomRequestDto;
 import com.mindsync.mindsync.dto.EmailSearchDto;
 import com.mindsync.mindsync.dto.ResponseDto;
 import com.mindsync.mindsync.entity.ChatRoom;
@@ -35,7 +35,7 @@ public class ChatRoomController {
     }
 
     @PostMapping("/room")
-    public ResponseDto createRoom(@RequestBody ChatRoomRequestDTO requestDto) {
+    public ResponseDto createRoom(@RequestBody ChatRoomRequestDto requestDto) {
         try {
             ChatRoom chatRoom = chatRoomService.createRoom(
                     requestDto.getTitle(),

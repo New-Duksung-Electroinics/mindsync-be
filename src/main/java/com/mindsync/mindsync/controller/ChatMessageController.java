@@ -1,6 +1,6 @@
 package com.mindsync.mindsync.controller;
 
-import com.mindsync.mindsync.dto.ChatMessageDTO;
+import com.mindsync.mindsync.dto.ChatMessageDto;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -17,7 +17,7 @@ public class ChatMessageController {
     }
 
     @MessageMapping("/chat/{roomId}/enter")
-    public void enterChatRoom(@Payload ChatMessageDTO message, @DestinationVariable String roomId) {
+    public void enterChatRoom(@Payload ChatMessageDto message, @DestinationVariable String roomId) {
         System.out.println("enter send: " + message.getSender());
         message.setMessage(message.getSender() + "is enter the room");
         messagingTemplate.convertAndSend("/topic/chat/" + roomId, message);
@@ -26,7 +26,7 @@ public class ChatMessageController {
 
     // 채팅 메시지 전송 처리
     @MessageMapping("/chat/{roomId}/send")
-    public void sendMessage(@Payload ChatMessageDTO message, @DestinationVariable String roomId) {
+    public void sendMessage(@Payload ChatMessageDto message, @DestinationVariable String roomId) {
         System.out.println("Message received from " + message.getSender() + ": " + message.getMessage());
         messagingTemplate.convertAndSend("/topic/chat/" + roomId, message);
         System.out.println("Message sent to room: " + roomId);
