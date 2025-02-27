@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class ChatRoomRequestDTO {
+public class ChatRoomRequestDto {
     private String title; // 회의 제목
     private String host; // 회의 주최자
     private List<String> participants; // 참여 멤버 리스트
