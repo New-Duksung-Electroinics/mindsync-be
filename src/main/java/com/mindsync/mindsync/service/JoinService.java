@@ -1,6 +1,6 @@
 package com.mindsync.mindsync.service;
 
-import com.mindsync.mindsync.dto.JoinDTO;
+import com.mindsync.mindsync.dto.JoinDto;
 import com.mindsync.mindsync.entity.User;
 import com.mindsync.mindsync.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,11 +17,11 @@ public class JoinService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public void joinProcess(JoinDTO joinDTO) {
-        String email = joinDTO.getEmail();
-        String password = joinDTO.getPassword();
-        String username = joinDTO.getUsername();
-        String usermbti = joinDTO.getUsermbti();
+    public void joinProcess(JoinDto joinDto) {
+        String email = joinDto.getEmail();
+        String password = joinDto.getPassword();
+        String username = joinDto.getUsername();
+        String usermbti = joinDto.getUsermbti();
 
         Boolean isExist = userRepository.existsByEmail(email);
 
