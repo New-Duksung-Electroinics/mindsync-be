@@ -14,7 +14,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 @Document(collection = "chat")
-public class ChatMessage {
+public class ChatRoomMessages {
     @Id
     private String roomId;
 
@@ -26,9 +26,11 @@ public class ChatMessage {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class Message{
-        private String sender;
+    public static class Message {
+        private String name;
+        private String email;
         private String message;
+        private int agendaId;
         private LocalDateTime timestamp;
     }
 

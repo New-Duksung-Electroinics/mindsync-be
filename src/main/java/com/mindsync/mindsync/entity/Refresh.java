@@ -12,7 +12,6 @@ public class Refresh {
 
     @Id
     private String id;
-
     private String email;
     private String refresh;
     private String expiration;
