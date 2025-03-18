@@ -22,7 +22,7 @@ public class ChatMessageController {
     @MessageMapping("/chat/{roomId}/enter")
     public void enterChatRoom(@Payload ChatMessageDto message, @DestinationVariable String roomId) {
         System.out.println("Entering room: " + roomId + " User: " + message.getEmail());
-        message.setMessage(message.getEmail() + "is entering");
+        message.setMessage(message.getEmail() + " is entering");
         messagingTemplate.convertAndSend("/topic/chat/" + roomId, message);
         System.out.println("message success: " + message.getMessage());
     }
