@@ -39,9 +39,10 @@ public class ChatRoomController {
         try {
             ChatRoom chatRoom = chatRoomService.createRoom(
                     requestDto.getTitle(),
-                    requestDto.getHost(),
+                    requestDto.getHost_email(),
                     requestDto.getParticipants(),
-                    requestDto.getContent()
+                    requestDto.getContent(),
+                    requestDto.getMbti()
             );
             Map<String, String> responseData = Map.of(
                     "roomId", chatRoom.getRoomId()
