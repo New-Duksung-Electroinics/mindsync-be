@@ -13,10 +13,10 @@ public class ChatRoomService {
         this.chatRoomRepository = chatRoomRepository;
     }
 
-    public ChatRoom createRoom(String title, String host, List<String> participants, String content) {
+    public ChatRoom createRoom(String title, String host_email, List<String> participants, String content, String mbti) {
 
         // 채팅방 생성 및 저장
-        ChatRoom chatRoom = ChatRoom.create(title, host, participants, content);
+        ChatRoom chatRoom = ChatRoom.create(title, host_email, participants, content, mbti);
         return chatRoomRepository.save(chatRoom);
     }
 
