@@ -23,4 +23,12 @@ public class UserService {
                 .map(user -> new EmailSearchDto(user.getEmail()))
                 .collect(Collectors.toList());
     }
+
+    public void updateMbti(String email, String newMbti) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) throw new IllegalArgumentException("해당 유저를 찾을 수 없습니다.");
+
+        user.setUsermbti(newMbti);
+        userRepository.save(user);
+    }
 }

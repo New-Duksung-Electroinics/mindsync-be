@@ -25,9 +25,12 @@ public class JwtHandshakeInterceptor implements HandshakeInterceptor {
 
         if (request instanceof ServletServerHttpRequest servletRequest) {
             HttpServletRequest httpServletRequest = servletRequest.getServletRequest();
-            String token = Optional.ofNullable(httpServletRequest.getHeader("Authorization"))
-                    .map(t -> t.replace("Bearer ", ""))
-                    .orElse(null);
+
+            String token = Optional.ofNullable(httpServletRequest.getParameter("token"))
+                    .orElseGet(() -> {
+                        String header = httpServletRequest.getHeader("Authorization");
+                        return header != null ? header.replace("Bearer ", "") : null;
+                    });
 
             System.out.println("🟡 추출된 AccessToken: " + token);
 
