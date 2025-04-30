@@ -59,38 +59,36 @@ jobs:
             LOG_DIR="/home/ubuntu/app-logs"
             mkdir -p $LOG_DIR
             touch $LOG_DIR/app.log
-  
-            # sudo 명령어에 비밀번호 자동 입력
+
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker container prune -f
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker image prune -af
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker volume prune -f
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker system prune -af --volumes
-  
-            # 기존 컨테이너 종료 (종료를 기다림)
+
             CONTAINER_ID=$(sudo docker ps -q --filter "publish=10")
 
             if [ ! -z "$CONTAINER_ID" ]; then
               echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker stop $CONTAINER_ID
               echo "컨테이너 종료 대기 중..."
-              
-              # 컨테이너 종료 상태를 기다림
               while true; do
-                # 컨테이너 상태 확인
                 CONTAINER_STATUS=$(sudo docker inspect --format '{{.State.Status}}' $CONTAINER_ID)
-                
-                # 종료된 상태이면 루프 종료
                 if [ "$CONTAINER_STATUS" == "exited" ]; then
                   echo "컨테이너 종료 완료"
                   break
                 fi
-                
-                # 1초 대기 후 다시 확인
                 sleep 1
               done
             fi
 
-          
-            # Docker 이미지 업데이트 및 컨테이너 실행
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker pull ${{ env.DOCKER_IMAGE_NAME }}:latest
-            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker run --name mindsync-be-container -d -p 10:8080 -e TZ=Asia/Seoul \
-              -v $LOG_DIR/app.log:/app/logs/app.log ${{ env.DOCKER_IMAGE_NAME }}:latest
+
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker run --name mindsync-be-container -d -p 10:8080 \
+              -e TZ=Asia/Seoul \
+              -e MONGO_HOST=172.17.0.1 \
+              -e MONGO_PORT=27017 \
+              -e MONGO_DB=mindsync-fe \
+              -e MONGO_USER=admin \
+              -e MONGO_PASS=admin \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              -v $LOG_DIR/app.log:/app/logs/app.log \
+              ${{ env.DOCKER_IMAGE_NAME }}:latest
