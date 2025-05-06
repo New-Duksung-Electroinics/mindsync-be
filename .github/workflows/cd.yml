@@ -10,6 +10,12 @@ env:
   SERVER_HOST: ${{ secrets.SERVER_HOST }}
   SERVER_SSH_USER: ${{ secrets.SERVER_SSH_USER }}
   PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+  MONGO_HOST: ${{ secrets.MONGO_HOST }}
+  MONGO_PORT: ${{ secrets.MONGO_PORT }}
+  MONGO_DB: ${{ secrets.MONGO_DB }}
+  ***REMOVED***: ${{ secrets.***REMOVED*** }}
+  ***REMOVED***: ${{ secrets.***REMOVED*** }}
+  ***REMOVED***: ${{ secrets.***REMOVED*** }}
 
 jobs:
   build-and-push-docker:
