@@ -4,7 +4,9 @@ on:
   push:
     branches:
       - main
-
+    paths-ignore:
+      - 'README.md'
+      - '**/README.md'
 env:
   DOCKER_IMAGE_NAME: kanepark/app
   SERVER_HOST: ${{ secrets.SERVER_HOST }}
