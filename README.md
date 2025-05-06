@@ -67,7 +67,8 @@ MindSync BackEnd
 ### 레포 공개를 위한 클린업
 
 ## 2025.05.06
-### 민감정보 secret key로 등록 및 CI 파이프라인 수정
+### 민감정보 secret key로 등록 및 CI/CD 파이프라인 수정
+### README 업데이트 시 CD/CD 실행 안되도록 수정
 
 
 
