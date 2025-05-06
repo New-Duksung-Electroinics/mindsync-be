@@ -97,9 +97,15 @@ jobs:
               done
             fi
 
-          
+        
             # Docker 이미지 업데이트 및 컨테이너 실행
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker pull ${{ env.DOCKER_IMAGE_NAME }}:latest
-            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker run --name mindsync-be-container -d -p 10:8080 -e TZ=Asia/Seoul \
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker run --name mindsync-be-container -d -p 10:8080 \
+              -e TZ=Asia/Seoul \
+              -e MONGO_HOST=${{ secrets.MONGO_HOST }} \
+              -e MONGO_PORT=${{ secrets.MONGO_PORT }} \
+              -e MONGO_DB=${{ secrets.MONGO_DB }} \
+              -e MONGO_USER=${{ secrets.MONGO_USER }} \
+              -e MONGO_PASS=${{ secrets.MONGO_PASS }} \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
               -v $LOG_DIR/app.log:/app/logs/app.log ${{ env.DOCKER_IMAGE_NAME }}:latest
-
