@@ -60,7 +60,7 @@ public class SecurityConfig {
                 .requestMatchers("/user/login", "/", "/user/join", "/user/check-email").permitAll()
                 .requestMatchers("/admin").hasRole("ADMIN")
                 .requestMatchers("/user/token").permitAll()
-                .requestMatchers("/chat/room", "/chat/search", "/user/mbti").authenticated()
+                .requestMatchers("/chat/room", "/chat/search", "/user/mbti", "/token/isValid").authenticated()
                 .requestMatchers("/ws-chat/**").permitAll()
                 .anyRequest().authenticated());
 
