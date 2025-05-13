@@ -73,3 +73,7 @@
 ### 📅 2025년 5월 6일
 - 민감 정보 Secret Key로 등록 및 CI/CD 파이프라인 수정
 - README 업데이트 시 CI/CD 실행 제외 처리
+
+### 📅 2025년 5월 10일
+- AccessToken 유효성 검사 API 구현
+- 특정 ROOM의 과거 메세지 기록 조회 API 설계
