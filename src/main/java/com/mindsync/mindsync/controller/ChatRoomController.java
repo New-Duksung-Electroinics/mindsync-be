@@ -1,10 +1,13 @@
 package com.mindsync.mindsync.controller;
 
 
+import com.mindsync.mindsync.dto.ChatRoomPastMessageDto;
 import com.mindsync.mindsync.dto.ChatRoomRequestDto;
 import com.mindsync.mindsync.dto.EmailSearchDto;
 import com.mindsync.mindsync.dto.ResponseDto;
 import com.mindsync.mindsync.entity.ChatRoom;
+import com.mindsync.mindsync.jwt.JWTUtil;
+import com.mindsync.mindsync.service.ChatMessageService;
 import com.mindsync.mindsync.service.ChatRoomService;
 import com.mindsync.mindsync.service.UserService;
 import com.mindsync.mindsync.utils.ResponseUtil;
@@ -25,13 +28,19 @@ import java.util.Map;
 public class ChatRoomController {
     private final ChatRoomService chatRoomService;
     private final UserService userService;
+    private final ChatMessageService chatMessageService;
+
+    private final JWTUtil jwtUtil;
+
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    public ChatRoomController(ChatRoomService chatRoomService, UserService userService, SimpMessagingTemplate messagingTemplate) {
+    public ChatRoomController(ChatRoomService chatRoomService, UserService userService, SimpMessagingTemplate messagingTemplate, ChatMessageService chatMessageService, JWTUtil jwtUtil) {
         this.chatRoomService = chatRoomService;
         this.userService = userService;
         this.messagingTemplate = messagingTemplate;
+        this.chatMessageService = chatMessageService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/room")
@@ -63,5 +72,31 @@ public class ChatRoomController {
 
         return ResponseEntity.ok(ResponseUtil.SUCCESS("검색 완료했습니다.", users));
     }
+
+    @GetMapping("/messages")
+    public ResponseDto<List<ChatRoomPastMessageDto>> getMessages(
+            @RequestHeader("Authorization") String header,
+            @RequestParam String roomId) {
+        try {
+            if (header == null || !header.startsWith("Bearer ")) {
+                return ResponseUtil.ERROR("Authorization header 누락 또는 잘못됨", null);
+            }
+
+            String token = header.substring(7);
+            if (!jwtUtil.validateToken(token)) {
+                return ResponseUtil.ERROR("유효하지 않은 AccessToken", null);
+            }
+
+            List<ChatRoomPastMessageDto> messages = chatMessageService.getAllMessages(roomId);
+            if (messages.isEmpty()) {
+                return ResponseUtil.SUCCESS("저장된 메시지가 없습니다.", messages);
+            }
+
+            return ResponseUtil.SUCCESS("저장된 메시지를 반환합니다.", messages);
+        } catch (Exception e) {
+            return ResponseUtil.ERROR("메시지 조회 중 서버 에러가 발생했습니다.", null);
+        }
+    }
+
 }
 
