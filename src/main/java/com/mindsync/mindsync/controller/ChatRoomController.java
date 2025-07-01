@@ -1,10 +1,7 @@
 package com.mindsync.mindsync.controller;
 
 
-import com.mindsync.mindsync.dto.ChatRoomPastMessageDto;
-import com.mindsync.mindsync.dto.ChatRoomRequestDto;
-import com.mindsync.mindsync.dto.EmailSearchDto;
-import com.mindsync.mindsync.dto.ResponseDto;
+import com.mindsync.mindsync.dto.*;
 import com.mindsync.mindsync.entity.ChatRoom;
 import com.mindsync.mindsync.jwt.JWTUtil;
 import com.mindsync.mindsync.service.ChatMessageService;
@@ -44,6 +41,7 @@ public class ChatRoomController {
     }
 
     @PostMapping("/room")
+    // 방 생성할 때, 호스트도 넣어줌!
     public ResponseDto createRoom(@RequestBody ChatRoomRequestDto requestDto) {
         try {
             ChatRoom chatRoom = chatRoomService.createRoom(
@@ -97,6 +95,18 @@ public class ChatRoomController {
             return ResponseUtil.ERROR("메시지 조회 중 서버 에러가 발생했습니다.", null);
         }
     }
+
+    @PostMapping("/agenda/{roomId}")
+    public ResponseEntity<?> updateAgenda(@PathVariable String roomId,
+                                          @RequestBody AgendaUpdateRequest request) {
+        chatMessageService.updateAgenda(roomId, request.getData());
+        return ResponseEntity.ok(Map.of(
+                "status", "SUCCESS",
+                "message", "목차 수정을 완료했습니다.",
+                "data", null
+        ));
+    }
+
 
 }
 

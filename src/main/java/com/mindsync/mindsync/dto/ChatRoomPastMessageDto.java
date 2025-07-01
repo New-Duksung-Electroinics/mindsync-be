@@ -9,6 +9,6 @@ public class ChatRoomPastMessageDto {
     private String name;
     private String email;
     private String message;
-    private int agendaId;
+    private String agendaId;
     private String timestamp;
 }
