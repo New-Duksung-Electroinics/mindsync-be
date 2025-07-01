@@ -19,8 +19,9 @@ public class ChatRoomMessages {
     private String roomId;
 
     // 목차 별로 그룹화 시키기 위해
-    private Map<Integer, List<Message>> messages;
+    private Map<String, List<Message>> messages;
 
+    private Map<String, String> agenda;
     @Getter
     @Setter
     @NoArgsConstructor
@@ -30,8 +31,10 @@ public class ChatRoomMessages {
         private String name;
         private String email;
         private String message;
-        private int agendaId;
+        private String agendaId;
         private LocalDateTime timestamp;
+
+
     }
 
 }

@@ -17,7 +17,7 @@ public class ChatMessageService {
 
     private final ChatMessageRepository chatMessageRepository;
 
-    public void saveMessage(String roomId, String name, String email, String message, int agendaId) {
+    public void saveMessage(String roomId, String name, String email, String message, String agendaId) {
         Optional<ChatRoomMessages> optionalChatRoom = chatMessageRepository.findById(roomId);
 
         ChatRoomMessages chatRoom;
@@ -76,4 +76,13 @@ public class ChatMessageService {
         result.sort(Comparator.comparing(ChatRoomPastMessageDto::getTimestamp));
         return result;
     }
+
+    public void updateAgenda(String roomId, Map<String, String> agendaData) {
+        ChatRoomMessages chat = chatMessageRepository.findById(roomId)
+                .orElseThrow(() -> new RuntimeException("해당 채팅방이 없습니다."));
+
+        chat.setAgenda(agendaData);
+        chatMessageRepository.save(chat);
+    }
+
 }
