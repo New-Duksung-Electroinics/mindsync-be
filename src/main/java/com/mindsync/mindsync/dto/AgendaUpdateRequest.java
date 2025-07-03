@@ -8,5 +8,5 @@ import java.util.Map;
 @Getter
 @Setter
 public class AgendaUpdateRequest {
-    private Map<String, String> data;
+    private Map<String, String> data; // 클라이언트 요청 형태
 }
