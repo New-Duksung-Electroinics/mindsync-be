@@ -1,5 +1,7 @@
 package com.mindsync.mindsync.service;
 
+
+import com.mindsync.mindsync.dto.AgendaItem;
 import com.mindsync.mindsync.dto.ChatRoomPastMessageDto;
 import com.mindsync.mindsync.entity.ChatRoomMessages;
 import com.mindsync.mindsync.entity.ChatRoomMessages.Message;
@@ -77,12 +79,5 @@ public class ChatMessageService {
         return result;
     }
 
-    public void updateAgenda(String roomId, Map<String, String> agendaData) {
-        ChatRoomMessages chat = chatMessageRepository.findById(roomId)
-                .orElseThrow(() -> new RuntimeException("해당 채팅방이 없습니다."));
-
-        chat.setAgenda(agendaData);
-        chatMessageRepository.save(chat);
-    }
 
 }

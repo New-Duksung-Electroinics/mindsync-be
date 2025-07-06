@@ -4,6 +4,7 @@ package com.mindsync.mindsync.controller;
 import com.mindsync.mindsync.dto.*;
 import com.mindsync.mindsync.entity.ChatRoom;
 import com.mindsync.mindsync.jwt.JWTUtil;
+import com.mindsync.mindsync.service.AgendaService;
 import com.mindsync.mindsync.service.ChatMessageService;
 import com.mindsync.mindsync.service.ChatRoomService;
 import com.mindsync.mindsync.service.UserService;
@@ -27,14 +28,18 @@ public class ChatRoomController {
     private final UserService userService;
     private final ChatMessageService chatMessageService;
 
+    private final AgendaService agendaService;
+
     private final JWTUtil jwtUtil;
 
 
     private final SimpMessagingTemplate messagingTemplate;
 
-    public ChatRoomController(ChatRoomService chatRoomService, UserService userService, SimpMessagingTemplate messagingTemplate, ChatMessageService chatMessageService, JWTUtil jwtUtil) {
+
+    public ChatRoomController(ChatRoomService chatRoomService, UserService userService, AgendaService agendaService, SimpMessagingTemplate messagingTemplate, ChatMessageService chatMessageService, JWTUtil jwtUtil) {
         this.chatRoomService = chatRoomService;
         this.userService = userService;
+        this.agendaService = agendaService;
         this.messagingTemplate = messagingTemplate;
         this.chatMessageService = chatMessageService;
         this.jwtUtil = jwtUtil;
@@ -99,11 +104,11 @@ public class ChatRoomController {
     @PostMapping("/agenda/{roomId}")
     public ResponseEntity<?> updateAgenda(@PathVariable String roomId,
                                           @RequestBody AgendaUpdateRequest request) {
-        chatMessageService.updateAgenda(roomId, request.getData());
+
+        agendaService.updateAgenda(roomId, request.getData());
         return ResponseEntity.ok(Map.of(
                 "status", "SUCCESS",
-                "message", "목차 수정을 완료했습니다.",
-                "data", null
+                "message", "목차 수정을 완료했습니다."
         ));
     }
 

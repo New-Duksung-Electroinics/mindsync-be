@@ -1,5 +1,6 @@
 package com.mindsync.mindsync.entity;
 
+import com.mindsync.mindsync.dto.AgendaItem;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,7 +22,8 @@ public class ChatRoomMessages {
     // 목차 별로 그룹화 시키기 위해
     private Map<String, List<Message>> messages;
 
-    private Map<String, String> agenda;
+    private Map<String, AgendaItem> agenda;
+
     @Getter
     @Setter
     @NoArgsConstructor
