@@ -58,7 +58,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/user/login", "/", "/user/join", "/user/check-email").permitAll()
-                .requestMatchers("/***REMOVED***").hasRole("ADMIN")
+                .requestMatchers("/admin").hasRole("ADMIN")
                 .requestMatchers("/user/token").permitAll()
                 .requestMatchers("/chat/room", "/chat/search", "/user/mbti", "/token/isValid", "/chat/messages", "/chat/agenda/**").authenticated()
                 .requestMatchers("/ws-chat/**").permitAll()

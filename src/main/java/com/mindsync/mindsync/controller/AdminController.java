@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AdminController {
-    @PostMapping("/***REMOVED***")
+    @PostMapping("/admin")
     public ResponseEntity<String> getAdminPage() {
         return ResponseEntity.ok("Admin 페이지 오세용!");
     }
