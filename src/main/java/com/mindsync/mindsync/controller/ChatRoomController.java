@@ -112,6 +112,16 @@ public class ChatRoomController {
         ));
     }
 
+    @GetMapping("/{roomId}/summary")
+    public ResponseEntity<?> getChatRoomSummary(@PathVariable String roomId) {
+        ChatRoom chatRoom = chatRoomService.getSummaryByRoomId(roomId);
+
+        return ResponseEntity.ok(Map.of(
+                "roomId", chatRoom.getRoomId(),
+                "summary", chatRoom.getSummary()
+        ));
+    }
+
 
 }
 
