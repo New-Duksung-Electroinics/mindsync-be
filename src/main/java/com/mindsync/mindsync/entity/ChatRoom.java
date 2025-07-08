@@ -10,6 +10,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Builder
+@AllArgsConstructor
 @Document(collection = "chatroom")
 public class ChatRoom {
 
@@ -21,17 +22,7 @@ public class ChatRoom {
     private List<String> participants; // 참여 멤버 (이메일 리스트)
     private String content; // 회의 예상 내용
     private String mbti; // 헬퍼 mbti
-
-    @Builder
-    public ChatRoom(String id, String roomId, String title, String host_email, List<String> participants, String content, String mbti) {
-        this.id = id;
-        this.roomId = roomId;
-        this.title = title;
-        this.host_email = host_email;
-        this.participants = participants;
-        this.content = content;
-        this.mbti = mbti;
-    }
+    private List<Summary> summary;
 
     public static ChatRoom create(String title, String host_email, List<String> participants, String content, String mbti) {
         return ChatRoom.builder()
