@@ -8,24 +8,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@Service
-public class ChatRoomService {
-    private final ChatRoomRepository chatRoomRepository;
+public interface ChatRoomService {
 
-    private ChatRoomService(ChatRoomRepository chatRoomRepository) {
-        this.chatRoomRepository = chatRoomRepository;
-    }
+    ChatRoom createRoom(String title, String host_email, List<String> participants, String content, String mbti);
 
-    public ChatRoom createRoom(String title, String host_email, List<String> participants, String content, String mbti) {
-
-        // 채팅방 생성 및 저장
-        ChatRoom chatRoom = ChatRoom.create(title, host_email, participants, content, mbti);
-        return chatRoomRepository.save(chatRoom);
-    }
-
-    public ChatRoom getSummaryByRoomId(String roomId) {
-        return chatRoomRepository.findByRoomId(roomId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 roomId가 없습니다."));
-    }
+    ChatRoom getSummaryByRoomId(String roomId);
 
 }
