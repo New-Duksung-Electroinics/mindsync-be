@@ -1,4 +1,4 @@
-package com.mindsync.mindsync.dto;
+package com.mindsync.mindsync.dto.user;
 import lombok.Getter;
 import lombok.Setter;
 

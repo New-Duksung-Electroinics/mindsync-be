@@ -1,6 +1,6 @@
 package com.mindsync.mindsync.jwt;
 
-import com.mindsync.mindsync.dto.CustomUserDetails;
+import com.mindsync.mindsync.dto.user.CustomUserDetails;
 import com.mindsync.mindsync.entity.User;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;

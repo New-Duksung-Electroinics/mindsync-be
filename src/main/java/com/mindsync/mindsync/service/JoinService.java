@@ -1,6 +1,6 @@
 package com.mindsync.mindsync.service;
 
-import com.mindsync.mindsync.dto.JoinDto;
+import com.mindsync.mindsync.dto.user.JoinDto;
 import com.mindsync.mindsync.entity.User;
 import com.mindsync.mindsync.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

@@ -1,8 +1,8 @@
 package com.mindsync.mindsync.controller;
 
-import com.mindsync.mindsync.dto.EmailCheckDto;
-import com.mindsync.mindsync.dto.JoinDto;
-import com.mindsync.mindsync.dto.ResponseDto;
+import com.mindsync.mindsync.dto.user.EmailCheckDto;
+import com.mindsync.mindsync.dto.user.JoinDto;
+import com.mindsync.mindsync.dto.util.ResponseDto;
 import com.mindsync.mindsync.service.JoinService;
 import com.mindsync.mindsync.utils.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;

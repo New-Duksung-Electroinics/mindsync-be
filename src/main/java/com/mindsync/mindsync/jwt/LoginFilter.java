@@ -1,8 +1,8 @@
 package com.mindsync.mindsync.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mindsync.mindsync.dto.CustomUserDetails;
-import com.mindsync.mindsync.dto.ResponseDto;
+import com.mindsync.mindsync.dto.user.CustomUserDetails;
+import com.mindsync.mindsync.dto.util.ResponseDto;
 import com.mindsync.mindsync.entity.Refresh;
 import com.mindsync.mindsync.repository.RefreshRepository;
 import com.mindsync.mindsync.utils.ResponseUtil;

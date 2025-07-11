@@ -1,6 +1,6 @@
 package com.mindsync.mindsync.service;
 
-import com.mindsync.mindsync.dto.EmailSearchDto;
+import com.mindsync.mindsync.dto.user.EmailSearchDto;
 import com.mindsync.mindsync.entity.User;
 import com.mindsync.mindsync.repository.UserRepository;
 import org.springframework.stereotype.Service;

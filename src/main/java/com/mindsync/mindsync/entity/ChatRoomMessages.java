@@ -1,6 +1,6 @@
 package com.mindsync.mindsync.entity;
 
-import com.mindsync.mindsync.dto.AgendaItem;
+import com.mindsync.mindsync.dto.chatroom.AgendaItem;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

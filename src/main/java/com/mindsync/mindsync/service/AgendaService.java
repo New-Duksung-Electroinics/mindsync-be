@@ -1,6 +1,6 @@
 package com.mindsync.mindsync.service;
 
-import com.mindsync.mindsync.dto.AgendaItem;
+import com.mindsync.mindsync.dto.chatroom.AgendaItem;
 import com.mindsync.mindsync.entity.Agenda;
 import com.mindsync.mindsync.repository.AgendaRepository;
 import lombok.RequiredArgsConstructor;

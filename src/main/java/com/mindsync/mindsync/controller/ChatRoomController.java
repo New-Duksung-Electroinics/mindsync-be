@@ -1,7 +1,11 @@
 package com.mindsync.mindsync.controller;
 
 
-import com.mindsync.mindsync.dto.*;
+import com.mindsync.mindsync.dto.chatroom.AgendaUpdateRequestDto;
+import com.mindsync.mindsync.dto.chatroom.ChatRoomPastMessageDto;
+import com.mindsync.mindsync.dto.chatroom.ChatRoomRequestDto;
+import com.mindsync.mindsync.dto.user.EmailSearchDto;
+import com.mindsync.mindsync.dto.util.ResponseDto;
 import com.mindsync.mindsync.entity.ChatRoom;
 import com.mindsync.mindsync.jwt.JWTUtil;
 import com.mindsync.mindsync.service.AgendaService;
@@ -9,11 +13,7 @@ import com.mindsync.mindsync.service.ChatMessageService;
 import com.mindsync.mindsync.service.ChatRoomService;
 import com.mindsync.mindsync.service.UserService;
 import com.mindsync.mindsync.utils.ResponseUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -103,7 +103,7 @@ public class ChatRoomController {
 
     @PostMapping("/agenda/{roomId}")
     public ResponseEntity<?> updateAgenda(@PathVariable String roomId,
-                                          @RequestBody AgendaUpdateRequest request) {
+                                          @RequestBody AgendaUpdateRequestDto request) {
 
         agendaService.updateAgenda(roomId, request.getData());
         return ResponseEntity.ok(Map.of(

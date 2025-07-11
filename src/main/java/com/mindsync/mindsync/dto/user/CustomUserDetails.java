@@ -1,4 +1,4 @@
-package com.mindsync.mindsync.dto;
+package com.mindsync.mindsync.dto.user;
 
 import com.mindsync.mindsync.entity.User;
 import org.springframework.security.core.GrantedAuthority;

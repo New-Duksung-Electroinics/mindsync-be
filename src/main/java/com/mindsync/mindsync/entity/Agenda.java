@@ -3,7 +3,7 @@ package com.mindsync.mindsync.entity;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import com.mindsync.mindsync.dto.AgendaItem;
+import com.mindsync.mindsync.dto.chatroom.AgendaItem;
 
 import java.util.Map;
 

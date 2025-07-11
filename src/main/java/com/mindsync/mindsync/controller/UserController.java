@@ -1,8 +1,8 @@
 package com.mindsync.mindsync.controller;
 
-import com.mindsync.mindsync.dto.CustomUserDetails;
-import com.mindsync.mindsync.dto.MbtiUpdateDto;
-import com.mindsync.mindsync.dto.ResponseDto;
+import com.mindsync.mindsync.dto.user.CustomUserDetails;
+import com.mindsync.mindsync.dto.user.MbtiUpdateDto;
+import com.mindsync.mindsync.dto.util.ResponseDto;
 import com.mindsync.mindsync.service.UserService;
 import com.mindsync.mindsync.utils.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;

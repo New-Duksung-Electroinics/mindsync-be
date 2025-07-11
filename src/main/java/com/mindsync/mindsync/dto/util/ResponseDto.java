@@ -1,4 +1,4 @@
-package com.mindsync.mindsync.dto;
+package com.mindsync.mindsync.dto.util;
 
 import com.mindsync.mindsync.utils.ResponseStatus;
 import lombok.Getter;

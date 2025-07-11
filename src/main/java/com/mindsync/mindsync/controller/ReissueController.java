@@ -1,6 +1,6 @@
 package com.mindsync.mindsync.controller;
 
-import com.mindsync.mindsync.dto.ResponseDto;
+import com.mindsync.mindsync.dto.util.ResponseDto;
 import com.mindsync.mindsync.entity.Refresh;
 import com.mindsync.mindsync.jwt.JWTUtil;
 import com.mindsync.mindsync.repository.RefreshRepository;

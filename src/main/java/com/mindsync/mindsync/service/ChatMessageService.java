@@ -1,8 +1,7 @@
 package com.mindsync.mindsync.service;
 
 
-import com.mindsync.mindsync.dto.AgendaItem;
-import com.mindsync.mindsync.dto.ChatRoomPastMessageDto;
+import com.mindsync.mindsync.dto.chatroom.ChatRoomPastMessageDto;
 import com.mindsync.mindsync.entity.ChatRoomMessages;
 import com.mindsync.mindsync.entity.ChatRoomMessages.Message;
 import com.mindsync.mindsync.repository.ChatMessageRepository;

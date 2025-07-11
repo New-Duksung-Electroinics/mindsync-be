@@ -1,7 +1,7 @@
 package com.mindsync.mindsync.controller;
 
-import com.mindsync.mindsync.dto.LoginDto;
-import com.mindsync.mindsync.dto.ResponseDto;
+import com.mindsync.mindsync.dto.user.LoginDto;
+import com.mindsync.mindsync.dto.util.ResponseDto;
 import com.mindsync.mindsync.utils.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

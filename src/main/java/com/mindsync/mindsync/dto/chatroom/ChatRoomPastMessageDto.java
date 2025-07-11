@@ -1,4 +1,4 @@
-package com.mindsync.mindsync.dto;
+package com.mindsync.mindsync.dto.chatroom;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.mindsync.mindsync.utils;
 
-import com.mindsync.mindsync.dto.ResponseDto;
+import com.mindsync.mindsync.dto.util.ResponseDto;
 
 public class ResponseUtil {
     public static <T>ResponseDto<T> SUCCESS (String message, T data) {
