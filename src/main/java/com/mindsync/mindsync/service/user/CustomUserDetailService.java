@@ -1,4 +1,4 @@
-package com.mindsync.mindsync.service;
+package com.mindsync.mindsync.service.user;
 
 import com.mindsync.mindsync.dto.user.CustomUserDetails;
 import com.mindsync.mindsync.entity.User;

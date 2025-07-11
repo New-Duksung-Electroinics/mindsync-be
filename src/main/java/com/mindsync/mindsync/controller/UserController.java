@@ -3,7 +3,7 @@ package com.mindsync.mindsync.controller;
 import com.mindsync.mindsync.dto.user.CustomUserDetails;
 import com.mindsync.mindsync.dto.user.MbtiUpdateDto;
 import com.mindsync.mindsync.dto.util.ResponseDto;
-import com.mindsync.mindsync.service.UserService;
+import com.mindsync.mindsync.service.user.UserService;
 import com.mindsync.mindsync.utils.ResponseUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

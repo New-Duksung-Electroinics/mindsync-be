@@ -1,7 +1,7 @@
 package com.mindsync.mindsync.controller;
 
 import com.mindsync.mindsync.dto.chatmessage.ChatMessageDto;
-import com.mindsync.mindsync.service.ChatMessageService;
+import com.mindsync.mindsync.service.chatmessage.ChatMessageService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;

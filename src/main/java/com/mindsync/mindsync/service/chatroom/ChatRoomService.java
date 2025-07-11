@@ -1,4 +1,4 @@
-package com.mindsync.mindsync.service;
+package com.mindsync.mindsync.service.chatroom;
 
 import com.mindsync.mindsync.entity.ChatRoom;
 import com.mindsync.mindsync.repository.ChatRoomRepository;

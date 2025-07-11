@@ -1,4 +1,4 @@
-package com.mindsync.mindsync.service;
+package com.mindsync.mindsync.service.chatroom;
 
 import com.mindsync.mindsync.dto.chatroom.AgendaItem;
 import com.mindsync.mindsync.entity.Agenda;

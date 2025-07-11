@@ -1,4 +1,4 @@
-package com.mindsync.mindsync.service;
+package com.mindsync.mindsync.service.chatmessage;
 
 
 import com.mindsync.mindsync.dto.chatroom.ChatRoomPastMessageDto;
