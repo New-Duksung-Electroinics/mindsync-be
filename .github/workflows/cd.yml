@@ -66,37 +66,35 @@ jobs:
             APP_NAME=mindsync-be-container
             IMAGE=${{ env.DOCKER_IMAGE_NAME }}:latest
             LOG_DIR="$HOME/app-logs"
-            mkdir -p "$LOG_DIR"
-            touch "$LOG_DIR/app.log"
+            mkdir -p "$LOG_DIR"; touch "$LOG_DIR/app.log"
 
             # (옵션) 정리
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker container prune -f || true
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker image prune -f || true
 
-            # 기존 컨테이너 내려주기(있으면)
+            # 네트워크 준비 및 mongodb 연결
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker network create appnet || true
+            echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker network connect appnet mongodb || true
+
+            # 기존 컨테이너 정리
             if sudo docker ps -a --format '{{.Names}}' | grep -q "^${APP_NAME}$"; then
-              echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker stop ${APP_NAME} || true
-              echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker rm   ${APP_NAME} || true
+              echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker rm -f ${APP_NAME} || true
             fi
 
             # 이미지 최신화
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker pull ${IMAGE}
 
-            # 새 컨테이너 실행
+            # 새 컨테이너 실행 (Mongo URI 한 줄로 설정)
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker run -d \
               --name ${APP_NAME} \
+              --network appnet \
               -p 8081:8080 \
               -e TZ=Asia/Seoul \
-              -e MONGO_HOST='${{ secrets.MONGO_HOST }}' \
-              -e MONGO_PORT='${{ secrets.MONGO_PORT }}' \
-              -e MONGO_DB='${{ secrets.MONGO_DB }}' \
-              -e MONGO_USER='${{ secrets.MONGO_USER }}' \
-              -e MONGO_PASS='${{ secrets.MONGO_PASS }}' \
+              -e SPRING_DATA_MONGODB_URI="mongodb://${{ secrets.MONGO_USER }}:${{ secrets.MONGO_PASS }}@mongodb:27017/${{ secrets.MONGO_DB }}?authSource=admin" \
               -e JWT_SECRET='${{ secrets.JWT_SECRET }}' \
               -v "$LOG_DIR/app.log:/app/logs/app.log" \
               ${IMAGE}
 
-            # 기동 확인
             sleep 3
             sudo docker ps --filter "name=${APP_NAME}"
             echo "✅ Deployed on :8081"
