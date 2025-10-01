@@ -67,34 +67,39 @@ jobs:
             IMAGE=${{ env.DOCKER_IMAGE_NAME }}:latest
             LOG_DIR="$HOME/app-logs"
             mkdir -p "$LOG_DIR"; touch "$LOG_DIR/app.log"
-
-            # (옵션) 정리
+  
+            #
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker container prune -f || true
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker image prune -f || true
-
-            # 네트워크 준비 및 mongodb 연결
+  
+            # 네트워크 준비 
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker network create appnet || true
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker network connect appnet mongodb || true
-
+  
             # 기존 컨테이너 정리
             if sudo docker ps -a --format '{{.Names}}' | grep -q "^${APP_NAME}$"; then
               echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker rm -f ${APP_NAME} || true
             fi
-
+  
             # 이미지 최신화
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker pull ${IMAGE}
-
-            # 새 컨테이너 실행 (Mongo URI 한 줄로 설정)
+  
+            # 새 컨테이너 실행
             echo "${{ secrets.SUDO_PASSWORD }}" | sudo -S docker run -d \
               --name ${APP_NAME} \
               --network appnet \
               -p 8081:8080 \
               -e TZ=Asia/Seoul \
-              -e SPRING_DATA_MONGODB_URI="mongodb://${{ secrets.MONGO_USER }}:${{ secrets.MONGO_PASS }}@mongodb:27017/${{ secrets.MONGO_DB }}?authSource=admin" \
+              -e SPRING_DATA_MONGODB_URI='${{ secrets.MONGO_URI }}' \
               -e JWT_SECRET='${{ secrets.JWT_SECRET }}' \
+              -e SERVER_SERVLET_CONTEXT_PATH='/v1' \
               -v "$LOG_DIR/app.log:/app/logs/app.log" \
               ${IMAGE}
-
-            sleep 3
+  
+            # 기동 확인
+            sleep 5
             sudo docker ps --filter "name=${APP_NAME}"
+            # curl -sf http://localhost:8081/v1/actuator/health || true
+  
             echo "✅ Deployed on :8081"
+
