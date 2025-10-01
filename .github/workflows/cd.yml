@@ -36,6 +36,9 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
+        env:
+          SPRING_DATA_MONGODB_URI: ${{ secrets.MONGO_URI }}
+          SPRING_JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: ./gradlew clean build --info
 
       - name: Build Docker image
