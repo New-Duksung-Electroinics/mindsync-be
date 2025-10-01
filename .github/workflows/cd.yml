@@ -94,7 +94,7 @@ jobs:
               -p 8081:8080 \
               -e TZ=Asia/Seoul \
               -e SPRING_DATA_MONGODB_URI='${{ secrets.MONGO_URI }}' \
-              -e JWT_SECRET='${{ secrets.JWT_SECRET }}' \
+              -e SPRING_JWT_SECRET='${{ secrets.JWT_SECRET }}' \
               -e SERVER_SERVLET_CONTEXT_PATH='/v1' \
               -v "$LOG_DIR/app.log:/app/logs/app.log" \
               ${IMAGE}
