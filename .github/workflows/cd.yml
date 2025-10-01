@@ -8,7 +8,7 @@ on:
       - '**/README.md'
 
 env:
-  DOCKER_IMAGE_NAME: kanepark/app
+  DOCKER_IMAGE_NAME: soojin434/app
   SERVER_HOST: ${{ secrets.SERVER_HOST }}
   SERVER_SSH_USER: ${{ secrets.SERVER_SSH_USER }}
   PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
