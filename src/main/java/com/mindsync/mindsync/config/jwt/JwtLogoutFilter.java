@@ -13,14 +13,12 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.filter.GenericFilterBean;
-
 import java.io.IOException;
 
 public class JwtLogoutFilter extends GenericFilterBean {
 
     private final JwtUtil jwtUtil;
     private final RefreshRepository refreshRepository;
-
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public JwtLogoutFilter(JwtUtil jwtUtil, RefreshRepository refreshRepository) {
@@ -29,91 +27,65 @@ public class JwtLogoutFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (!(request instanceof HttpServletRequest) || !(response instanceof HttpServletResponse)) {
-            chain.doFilter(request, response);
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
+        if (!(req instanceof HttpServletRequest httpReq) || !(res instanceof HttpServletResponse httpRes)) {
+            chain.doFilter(req, res);
             return;
         }
 
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
-
-        // 요청 URI 확인
-        if (!httpRequest.getRequestURI().equals("/api/user/logout")) {
-            chain.doFilter(request, response);
+        if (!httpReq.getRequestURI().equals("/auth/logout")) {
+            chain.doFilter(req, res);
             return;
         }
 
-        // 요청 메소드 확인 (POST만 허용)
-        if (!httpRequest.getMethod().equals("POST")) {
-            CommonResponse<String> commonResponse = ResponseUtil.ERROR("잘못된 요청입니다. 로그아웃은 POST 요청만 가능합니다.", null);
-            writeJsonResponse(httpResponse, HttpServletResponse.SC_BAD_REQUEST, commonResponse);
+        if (!httpReq.getMethod().equals("POST")) {
+            writeJson(httpRes, HttpServletResponse.SC_BAD_REQUEST, ResponseUtil.ERROR("잘못된 요청입니다. 로그아웃은 POST 요청만 가능합니다.", null));
             return;
         }
 
-        // Refresh Token 가져오기
         String refresh = null;
-        Cookie[] cookies = httpRequest.getCookies();
+        Cookie[] cookies = httpReq.getCookies();
         if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("refresh")) {
-                    refresh = cookie.getValue();
-                }
-            }
+            for (Cookie c : cookies) if ("refresh".equals(c.getName())) refresh = c.getValue();
         }
-
-        // Refresh Token이 없으면 오류 응답 반환
         if (refresh == null) {
-            CommonResponse<String> commonResponse = ResponseUtil.ERROR("Refresh Token이 없습니다.", null);
-            writeJsonResponse(httpResponse, HttpServletResponse.SC_BAD_REQUEST, commonResponse);
+            writeJson(httpRes, HttpServletResponse.SC_BAD_REQUEST, ResponseUtil.ERROR("Refresh Token이 없습니다.", null));
             return;
         }
 
-        // 토큰 만료 여부 확인
-        try {
-            jwtUtil.isExpired(refresh);
-        } catch (ExpiredJwtException e) {
-            CommonResponse<String> commonResponse = ResponseUtil.ERROR("Refresh Token이 만료되었습니다.", null);
-            writeJsonResponse(httpResponse, HttpServletResponse.SC_BAD_REQUEST, commonResponse);
+        try { jwtUtil.isExpired(refresh); }
+        catch (ExpiredJwtException e) {
+            writeJson(httpRes, HttpServletResponse.SC_BAD_REQUEST, ResponseUtil.ERROR("Refresh Token이 만료되었습니다.", null));
             return;
         }
 
-        // 토큰이 refresh인지 확인
-        String category = jwtUtil.getCategory(refresh);
-        if (!category.equals("refresh")) {
-            CommonResponse<String> commonResponse = ResponseUtil.ERROR("유효하지 않은 Refresh Token입니다.", null);
-            writeJsonResponse(httpResponse, HttpServletResponse.SC_BAD_REQUEST, commonResponse);
+        if (!"refresh".equals(jwtUtil.getCategory(refresh))) {
+            writeJson(httpRes, HttpServletResponse.SC_BAD_REQUEST, ResponseUtil.ERROR("유효하지 않은 Refresh Token입니다.", null));
             return;
         }
 
-        // Refresh Token이 DB에 존재하는지 확인
-        boolean isExist = refreshRepository.existsByRefresh(refresh);
-        if (!isExist) {
-            CommonResponse<String> commonResponse = ResponseUtil.ERROR("유효하지 않은 Refresh Token입니다.", null);
-            writeJsonResponse(httpResponse, HttpServletResponse.SC_BAD_REQUEST, commonResponse);
+        if (!refreshRepository.existsByRefresh(refresh)) {
+            writeJson(httpRes, HttpServletResponse.SC_BAD_REQUEST, ResponseUtil.ERROR("유효하지 않은 Refresh Token입니다.", null));
             return;
         }
 
-        // Refresh Token DB에서 제거
         refreshRepository.deleteByRefresh(refresh);
 
-        // Refresh Token을 제거하는 쿠키 설정
+        // 쿠키 제거 (경로는 넓게 설정)
         Cookie cookie = new Cookie("refresh", null);
         cookie.setMaxAge(0);
-        cookie.setPath("/api/user");
-        httpResponse.addCookie(cookie);
+        cookie.setPath("/");
+        // cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        httpRes.addCookie(cookie);
 
-        // 성공 응답 반환
-        CommonResponse<String> commonResponse = ResponseUtil.SUCCESS("로그아웃 되었습니다.", null);
-        writeJsonResponse(httpResponse, HttpServletResponse.SC_OK, commonResponse);
+        writeJson(httpRes, HttpServletResponse.SC_OK, ResponseUtil.SUCCESS("로그아웃 되었습니다.", null));
     }
 
-
-    private void writeJsonResponse(HttpServletResponse response, int status, CommonResponse<?> commonResponse) throws IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setStatus(status);
-        objectMapper.writeValue(response.getWriter(), commonResponse);
+    private void writeJson(HttpServletResponse res, int status, CommonResponse<?> body) throws IOException {
+        res.setStatus(status);
+        res.setCharacterEncoding("UTF-8");
+        res.setContentType("application/json");
+        objectMapper.writeValue(res.getWriter(), body);
     }
-
 }
