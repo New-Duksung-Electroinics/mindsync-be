@@ -1,7 +1,7 @@
 package com.mindsync.mindsync.service;
 
-import com.mindsync.mindsync.dto.CustomUserDetails;
-import com.mindsync.mindsync.entity.User;
+import com.mindsync.mindsync.config.auth.CustomUserDetails;
+import com.mindsync.mindsync.document.User;
 import com.mindsync.mindsync.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

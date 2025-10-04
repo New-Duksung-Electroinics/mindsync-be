@@ -1,6 +1,6 @@
 package com.mindsync.mindsync.repository;
 
-import com.mindsync.mindsync.entity.ChatRoom;
+import com.mindsync.mindsync.document.ChatRoom;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;

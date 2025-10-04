@@ -1,7 +1,7 @@
 package com.mindsync.mindsync.config;
 
-import com.mindsync.mindsync.jwt.JWTUtil;
-import com.mindsync.mindsync.jwt.JwtHandshakeInterceptor;
+import com.mindsync.mindsync.config.jwt.JwtUtil;
+import com.mindsync.mindsync.config.jwt.JwtHandshakeInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -12,9 +12,9 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final JWTUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
-    public WebSocketConfig(JWTUtil jwtUtil) {
+    public WebSocketConfig(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
 

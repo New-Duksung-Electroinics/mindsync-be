@@ -1,10 +1,10 @@
 package com.mindsync.mindsync.config;
 
 
-import com.mindsync.mindsync.jwt.CustomLogoutFilter;
-import com.mindsync.mindsync.jwt.JWTFilter;
-import com.mindsync.mindsync.jwt.JWTUtil;
-import com.mindsync.mindsync.jwt.LoginFilter;
+import com.mindsync.mindsync.config.jwt.JwtLogoutFilter;
+import com.mindsync.mindsync.config.jwt.JwtAuthenticationFilter;
+import com.mindsync.mindsync.config.jwt.JwtUtil;
+import com.mindsync.mindsync.config.jwt.JwtLoginFilter;
 import com.mindsync.mindsync.repository.RefreshRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,10 +26,10 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
-    private final JWTUtil jwtUtil;
+    private final JwtUtil jwtUtil;
     private final RefreshRepository refreshRepository;
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, RefreshRepository refreshRepository) {
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JwtUtil jwtUtil, RefreshRepository refreshRepository) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
         this.refreshRepository = refreshRepository;
@@ -65,11 +65,11 @@ public class SecurityConfig {
                 .anyRequest().authenticated());
 
 
-        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(new JwtLoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class);
 
-        http.addFilterBefore(new JWTFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
-        http.addFilterBefore(new CustomLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
+        http.addFilterBefore(new JwtLogoutFilter(jwtUtil, refreshRepository), LogoutFilter.class);
 
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

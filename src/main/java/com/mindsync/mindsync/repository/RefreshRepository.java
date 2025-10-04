@@ -1,6 +1,6 @@
 package com.mindsync.mindsync.repository;
 
-import com.mindsync.mindsync.entity.Refresh;
+import com.mindsync.mindsync.document.Refresh;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.transaction.annotation.Transactional;
 

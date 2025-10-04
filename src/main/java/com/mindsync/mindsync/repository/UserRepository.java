@@ -1,6 +1,6 @@
 package com.mindsync.mindsync.repository;
 
-import com.mindsync.mindsync.entity.User;
+import com.mindsync.mindsync.document.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +14,5 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     User findByEmail(String email);
 
-    List<User> findByEmailStartingWith(String query);
+    List<User> findByEmailStartingWithIgnoreCase(String query);
 }
