@@ -17,7 +17,8 @@ env:
   MONGO_DB:   ${{ secrets.MONGO_DB }}
   MONGO_USER: ${{ secrets.MONGO_USER }}
   MONGO_PASS: ${{ secrets.MONGO_PASS }}
-  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }
+  CORS_ALLOWED_ORIGINS: ${{ vars.CORS_ALLOWED_ORIGINS }}
 
 jobs:
   build-and-push-docker:
