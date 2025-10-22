@@ -5,6 +5,8 @@ import com.mindsync.mindsync.config.jwt.JwtLoginFilter;
 import com.mindsync.mindsync.config.jwt.JwtLogoutFilter;
 import com.mindsync.mindsync.config.jwt.JwtUtil;
 import com.mindsync.mindsync.repository.RefreshRepository;
+import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +31,9 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+
+    @Value("${cors.allowed-origins}")
+    private String allowedOriginsCsv;
 
     public SecurityConfig(AuthenticationConfiguration authenticationConfiguration,
             JwtUtil jwtUtil,
@@ -107,11 +112,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();
-        cfg.setAllowedOrigins(List.of("http://localhost:3000")); // 필요 시 배포 도메인 추가
-        cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        cfg.setAllowedOriginPatterns(Arrays.asList(allowedOriginsCsv.split("\\s*,\\s*")));
+        cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         cfg.setAllowedHeaders(List.of("*"));
+        cfg.setExposedHeaders(List.of("Authorization","access","Set-Cookie","Content-Type"));
         cfg.setAllowCredentials(true);
-        cfg.setExposedHeaders(List.of("access", "Set-Cookie"));
+        cfg.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource src = new UrlBasedCorsConfigurationSource();
         src.registerCorsConfiguration("/**", cfg);
