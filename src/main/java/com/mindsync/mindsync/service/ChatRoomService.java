@@ -25,4 +25,8 @@ public class ChatRoomService {
         return chatRoomRepository.findByRoomId(roomId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 roomId가 없습니다."));
     }
+
+    public ChatRoom getRoomById(String roomId) {
+        return chatRoomRepository.findByRoomId(roomId).orElse(null);
+    }
 }

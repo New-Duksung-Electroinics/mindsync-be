@@ -93,7 +93,9 @@ public class SecurityConfig {
                 // 채팅/유저 보호 리소스
                 .requestMatchers(
                         "/users/me/**",
-                        "/chat/rooms/**"        // 방 생성/조회/요약/메시지 조회 등
+                        "/chat/rooms/**",
+                        "/chat/agenda/**",
+                        "/chat/room/**"
                 ).authenticated()
                 .anyRequest().authenticated()
         );

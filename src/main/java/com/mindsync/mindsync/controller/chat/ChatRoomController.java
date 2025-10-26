@@ -32,12 +32,8 @@ public class ChatRoomController {
     private final ChatRoomService chatRoomService;
     private final UserService userService;
     private final ChatMessageService chatMessageService;
-
     private final AgendaService agendaService;
-
     private final JwtUtil jwtUtil;
-
-
     private final SimpMessagingTemplate messagingTemplate;
 
 
@@ -89,17 +85,14 @@ public class ChatRoomController {
             if (header == null || !header.startsWith("Bearer ")) {
                 return ResponseUtil.ERROR("Authorization header 누락 또는 잘못됨", null);
             }
-
             String token = header.substring(7);
             if (!jwtUtil.validateToken(token)) {
                 return ResponseUtil.ERROR("유효하지 않은 AccessToken", null);
             }
-
             List<ChatRoomPastMessageResponse> messages = chatMessageService.getAllMessages(roomId);
             if (messages.isEmpty()) {
                 return ResponseUtil.SUCCESS("저장된 메시지가 없습니다.", messages);
             }
-
             return ResponseUtil.SUCCESS("저장된 메시지를 반환합니다.", messages);
         } catch (Exception e) {
             return ResponseUtil.ERROR("메시지 조회 중 서버 에러가 발생했습니다.", null);
@@ -109,8 +102,8 @@ public class ChatRoomController {
     @PostMapping("/agenda/{roomId}")
     public ResponseEntity<?> updateAgenda(@PathVariable String roomId,
             @RequestBody AgendaUpdateRequest request) {
-
         agendaService.updateAgenda(roomId, request.getData());
+
         return ResponseEntity.ok(Map.of(
                 "status", "SUCCESS",
                 "message", "목차 수정을 완료했습니다."
@@ -125,6 +118,30 @@ public class ChatRoomController {
                 "roomId", chatRoom.getRoomId(),
                 "summary", chatRoom.getSummary()
         ));
+    }
+
+    @GetMapping("/room/{roomId}")
+    public ResponseEntity<CommonResponse<Map<String, Object>>> getRoomMeta(@PathVariable String roomId) {
+        ChatRoom room = chatRoomService.getRoomById(roomId);
+        if (room == null) {
+            return ResponseEntity.status(404).body(ResponseUtil.ERROR("room not found", null));
+        }
+        List<String> participants = room.getParticipants() != null ? room.getParticipants() : Collections.emptyList();
+
+        Map<String, Object> data = Map.of(
+                "roomId", room.getRoomId(),
+                "title", room.getTitle(),
+                "host_email", room.getHost_email(),
+                "participants", participants
+        );
+        return ResponseEntity.ok(ResponseUtil.SUCCESS("조회 완료", data));
+    }
+
+    @GetMapping("/agenda/{roomId}")
+    public ResponseEntity<CommonResponse<Map<String, String>>> getAgenda(@PathVariable String roomId) {
+        Map<String, String> data = agendaService.getAgenda(roomId);
+        if (data == null) data = Collections.emptyMap();
+        return ResponseEntity.ok(ResponseUtil.SUCCESS("조회 완료", data));
     }
 
 
